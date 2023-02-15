@@ -1,5 +1,5 @@
 import { EnumItem } from './enum-item';
-import { LoadOption } from './load-option';
+import { LoadHandlerBase } from './load-handler-base';
 
 export class Enum<T extends EnumItem> {
     private m_Reduce: Promise<{ [key: string]: any; }>;
@@ -8,10 +8,8 @@ export class Enum<T extends EnumItem> {
     public get allItem() {
         this.m_AllItem ??= new Promise<{ [value: number]: T }>(async (s, f) => {
             try {
-                let res: { [value: number]: T } = {};
-                for (const r of this.m_LoadOptions) {
-                    await r(this, res);
-                }
+                const res: { [value: number]: T } = {};
+                await this.m_LoadHandler.handle(this, res);
                 s(res);
             } catch (ex) {
                 f(ex);
@@ -35,8 +33,8 @@ export class Enum<T extends EnumItem> {
 
     public constructor(
         public name: string,
+        private m_LoadHandler: LoadHandlerBase,
         private m_ReduceFunc: { [key: string]: (memo: any, item: T) => any; },
-        private m_LoadOptions: LoadOption[],
     ) { }
 
     public async get(predicate: (entry: T) => boolean) {
