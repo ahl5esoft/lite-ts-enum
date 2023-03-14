@@ -1,11 +1,11 @@
 import { Enum } from './enum';
 import { EnumFactoryBase } from './enum-factory-base';
 import { EnumItem } from './enum-item';
-import { LoadHandlerBase } from './load-handler-base';
+import { LoadEnumHandlerBase } from './load-handler-base';
 
 export class EnumFactory extends EnumFactoryBase {
     public constructor(
-        private m_LoadHandler: LoadHandlerBase,
+        private m_LoadHandler: LoadEnumHandlerBase,
         private m_ReduceFunc: { [key: string]: (memo: any, item: any) => any; },
     ) {
         super();

@@ -1,12 +1,12 @@
-import { Enum } from './enum';
+import { LoadEnumHandleOption } from './load-handle-option';
 
-export abstract class LoadHandlerBase {
-    protected next: LoadHandlerBase;
+export abstract class LoadEnumHandlerBase {
+    protected next: LoadEnumHandlerBase;
 
-    public setNext(v: LoadHandlerBase) {
+    public setNext(v: LoadEnumHandlerBase) {
         this.next = v;
         return this.next;
     }
 
-    public abstract handle(target: Enum<any>, res: { [value: number]: any }): Promise<void>;
+    public abstract handle(opt: LoadEnumHandleOption): Promise<void>;
 }
