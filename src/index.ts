@@ -4,3 +4,6 @@ export * from './enum-factory-base';
 export * from './enum-item';
 export * from './load-handle-option';
 export * from './load-handler-base';
+export * from './reward';
+export * from './value';
+export * from './value-type-data';
