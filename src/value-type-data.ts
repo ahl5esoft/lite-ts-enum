@@ -1,7 +1,23 @@
 import moment from 'moment';
 
 import { EnumItem } from './enum-item';
-import { Reward } from './reward';
+
+export type Value = {
+    count: number;
+    valueType: number;
+} & Partial<{
+    targetNo: number;
+    targetType: number;
+    source: string;
+}>;
+
+export type Reward = Value & {
+    weight?: number;
+};
+
+export type ValueCondition = Value & {
+    op: string;
+};
 
 export class ValueTypeData extends EnumItem {
     /**
