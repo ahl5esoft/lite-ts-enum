@@ -5,11 +5,12 @@ import { LoadEnumHandlerBase } from './load-handler-base';
 export class Enum<T extends EnumItem> {
     private m_Reduce: Promise<{ [key: string]: any; }>;
 
-    private m_AllItem: Promise<{ [no: number]: T }>;
+    private m_AllItem: Promise<{ [no: number]: T; }>;
     public get allItem() {
-        this.m_AllItem ??= new Promise<{ [no: number]: T }>(async (s, f) => {
+        this.m_AllItem ??= new Promise<{ [no: number]: T; }>(async (s, f) => {
             try {
                 const opt: LoadEnumHandleOption = {
+                    areaNo: this.m_AreaNo,
                     enum: this,
                     res: {},
                 };
@@ -37,6 +38,7 @@ export class Enum<T extends EnumItem> {
 
     public constructor(
         public name: string,
+        private m_AreaNo: number,
         private m_LoadHandler: LoadEnumHandlerBase,
         private m_ReduceFunc: { [key: string]: (memo: any, item: T) => any; },
     ) { }
