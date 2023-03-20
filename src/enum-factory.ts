@@ -11,9 +11,10 @@ export class EnumFactory extends EnumFactoryBase {
         super();
     }
 
-    public build<T extends EnumItem>(nameOrCtor: string | (new () => T)) {
+    public build<T extends EnumItem>(nameOrCtor: string | (new () => T), areaNo = 0) {
         return new Enum(
             typeof nameOrCtor == 'string' ? nameOrCtor : nameOrCtor.name,
+            areaNo,
             this.m_LoadHandler,
             this.m_ReduceFunc,
         );
