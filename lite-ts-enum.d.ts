@@ -33,6 +33,7 @@ declare class Enum<T extends EnumItem> {
     getReduce<TReduce>(typer: string): Promise<TReduce>;
 }
 declare abstract class EnumFactoryBase {
+    static ctor: string;
     abstract build<T extends EnumItem>(nameOrCtor: string | (new () => T), areaNo?: number): Enum<T>;
 }
 declare class EnumFactory extends EnumFactoryBase {
