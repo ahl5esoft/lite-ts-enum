@@ -1,7 +1,7 @@
-import { Enum } from './enum';
+import { ReadonlyEnum } from './readonly-enum';
 
 export type LoadEnumHandleOption = {
-    enum: Enum<any>;
+    enum: ReadonlyEnum<any>;
     res: { [no: number]: any; };
     areaNo?: number;
 };

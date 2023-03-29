@@ -1,4 +1,4 @@
-import { Enum } from './enum';
+import { ReadonlyEnum } from './readonly-enum';
 import { EnumFactoryBase } from './enum-factory-base';
 import { EnumItem } from './enum-item';
 import { LoadEnumHandlerBase } from './load-handler-base';
@@ -12,7 +12,7 @@ export class EnumFactory extends EnumFactoryBase {
     }
 
     public build<T extends EnumItem>(nameOrCtor: string | (new () => T), areaNo = 0) {
-        return new Enum(
+        return new ReadonlyEnum(
             typeof nameOrCtor == 'string' ? nameOrCtor : nameOrCtor.name,
             areaNo,
             this.m_LoadHandler,

@@ -1,78 +1,139 @@
-import { deepStrictEqual } from 'assert';
-import { Mock } from 'lite-ts-mock';
+import { DbFactoryBase, IDbQuery, IDbRepository } from 'lite-ts-db';
+import { Mock, mockAny } from 'lite-ts-mock';
+import { RedisBase } from 'lite-ts-redis';
 
 import { Enum as Self } from './enum';
+import { EnumItem } from './enum-item';
 import { LoadEnumHandlerBase } from './load-handler-base';
 
 describe('src/enum.ts', () => {
-    describe('.allItem', () => {
-        it('ok', async () => {
+    describe('save', () => {
+        // 新增但不备份
+        it('add but not backup', async () => {
+            const name = 'aaa';
+            const areaNo = 10001;
             const mockHandler = new Mock<LoadEnumHandlerBase>();
-            const self = new Self('tt', 0, mockHandler.actual, null);
+            const mockDbFactory = new Mock<DbFactoryBase>();
+            const mockRedis = new Mock<RedisBase>();
+            const self = new Self(
+                name,
+                mockHandler.actual,
+                null,
+                areaNo,
+                mockDbFactory.actual,
+                mockRedis.actual
+            );
 
             mockHandler.expected.handle({
-                areaNo: 0,
+                areaNo: areaNo,
                 enum: self,
                 res: {}
             });
 
-            const res = await self.allItem;
-            await self.allItem;
-            deepStrictEqual(res, {});
-        });
-    });
-
-    describe('.items', () => {
-        it('ok', async () => {
-            const self = new Self('tt', 0, null, null);
-
-            Reflect.set(self, 'm_AllItem', {
-                a: 'aa',
-                b: 'bb'
-            });
-
-            const res = await self.items;
-            deepStrictEqual(res, ['aa', 'bb']);
-        });
-    });
-
-    describe('.get(predicate: (entry: T) => boolean)', () => {
-        it('ok', async () => {
-            const self = new Self('tt', 0, null, null);
-
-            Reflect.set(self, 'm_AllItem', {
-                a: {
-                    value: 1
+            const items = [
+                {
+                    value: 1,
+                    key: 'one'
                 },
-                b: {
-                    value: 2
+                {
+                    value: 2,
+                    key: 'two'
                 }
+            ] as EnumItem[];
+            const mockDbQuery = new Mock<IDbQuery<{ id: string, items: EnumItem[]; }>>();
+            mockDbQuery.expectReturn(
+                r => r.toArray(mockAny),
+                []
+            );
+            const mockDbRepo = new Mock<IDbRepository<{ id: string, items: EnumItem[]; }>>();
+            mockDbRepo.expectReturn(
+                r => r.query(),
+                mockDbQuery.actual
+            );
+            mockDbFactory.expectReturn(
+                r => r.db(mockAny, mockAny),
+                mockDbRepo.actual
+            );
+
+            mockDbRepo.expected.add({
+                id: name,
+                items: items
             });
 
-            const res = await self.get(r => r.value == 2);
-            deepStrictEqual(res, {
-                value: 2
-            });
+            await self.save(items);
         });
-    });
+        // 修改并且备份
+        it.only('save and backup', async () => {
+            const name = 'aaa';
+            const areaNo = 10001;
+            const mockHandler = new Mock<LoadEnumHandlerBase>();
+            const mockDbFactory = new Mock<DbFactoryBase>();
+            const mockRedis = new Mock<RedisBase>();
+            const self = new Self(
+                name,
+                mockHandler.actual,
+                null,
+                areaNo,
+                mockDbFactory.actual,
+                mockRedis.actual
+            );
 
-    describe('.getReduce<TReduce>(typer: string)', () => {
-        it('ok', async () => {
-            const self = new Self('tt', 0, null, null);
+            mockHandler.expected.handle({
+                areaNo: areaNo,
+                enum: self,
+                res: {}
+            });
 
-            Reflect.set(self, 'm_Reduce', {
-                a: {
-                    value: 1
+            const saveItems = [
+                {
+                    value: 3,
+                    key: 'three'
                 },
-                b: {
-                    value: 2
+                {
+                    value: 4,
+                    key: 'four'
                 }
+            ] as EnumItem[];
+
+            const expire = 5;
+            mockRedis.expected.set(
+                `Backup:Enum:${name}`,
+                JSON.stringify(saveItems),
+                'EX',
+                expire
+            );
+
+            const mockDbQuery = new Mock<IDbQuery<{ id: string, items: EnumItem[]; }>>();
+            mockDbQuery.expectReturn(
+                r => r.toArray({ where: { id: name } }),
+                [{
+                    id: name,
+                    items: [{
+                        value: 1,
+                        key: 'one'
+                    },
+                    {
+                        value: 2,
+                        key: 'two'
+                    }]
+                }]
+            );
+            const mockDbRepo = new Mock<IDbRepository<{ id: string, items: EnumItem[]; }>>();
+            mockDbRepo.expectReturn(
+                r => r.query(),
+                mockDbQuery.actual
+            );
+            mockDbFactory.expectReturn(
+                r => r.db(mockAny, mockAny),
+                mockDbRepo.actual
+            );
+
+            mockDbRepo.expected.save({
+                id: name,
+                items: saveItems
             });
 
-            const res = await self.getReduce('a');
-            deepStrictEqual(res, {
-                value: 1
-            });
+            await self.save(saveItems, expire);
         });
     });
 });

@@ -1,73 +1,58 @@
+import { areaDbOption, DbFactoryBase } from 'lite-ts-db';
+import { modelDbOption } from 'lite-ts-mongo';
+import { RedisBase } from 'lite-ts-redis';
+
 import { EnumItem } from './enum-item';
-import { LoadEnumHandleOption } from './load-handle-option';
 import { LoadEnumHandlerBase } from './load-handler-base';
+import { ReadonlyEnum } from './readonly-enum';
 
-export class Enum<T extends EnumItem> {
-    private m_Reduce: Promise<{ [key: string]: any; }>;
-
-    private m_AllItem: Promise<{ [no: number]: T; }>;
-    public get allItem() {
-        this.m_AllItem ??= new Promise<{ [no: number]: T; }>(async (s, f) => {
-            try {
-                const opt: LoadEnumHandleOption = {
-                    areaNo: this.m_AreaNo,
-                    enum: this,
-                    res: {},
-                };
-                await this.m_LoadHandler.handle(opt);
-                s(opt.res);
-            } catch (ex) {
-                f(ex);
-            }
-        });
-        return this.m_AllItem;
-    }
-
-    public get items() {
-        return new Promise<T[]>(async (s, f) => {
-            try {
-                const allItem = await this.allItem;
-                s(
-                    Object.values(allItem)
-                );
-            } catch (ex) {
-                f(ex);
-            }
-        });
-    }
-
+class EnumModel {
+    id: string;
+    items: EnumItem[];
+}
+export class Enum<T extends EnumItem> extends ReadonlyEnum<T> {
     public constructor(
         public name: string,
-        private m_AreaNo: number,
-        private m_LoadHandler: LoadEnumHandlerBase,
-        private m_ReduceFunc: { [key: string]: (memo: any, item: T) => any; },
-    ) { }
-
-    public async get(predicate: (entry: T) => boolean) {
-        const items = await this.items;
-        return items.find(r => {
-            return predicate(r);
-        });
+        protected loadHandler: LoadEnumHandlerBase,
+        protected reduceFunc: { [key: string]: (memo: any, item: T) => any; },
+        private areaNo: number,
+        private m_DbFactory: DbFactoryBase,
+        private m_Redis: RedisBase
+    ) {
+        super(name, areaNo, loadHandler, reduceFunc);
     }
 
-    public async getReduce<TReduce>(typer: string) {
-        this.m_Reduce ??= new Promise<{ [key: string]: any; }>(async (s, f) => {
-            try {
-                const items = await this.items;
-                s(
-                    Object.entries(this.m_ReduceFunc).reduce((memo, [k, v]) => {
-                        memo[k] = items.reduce((memo, r) => {
-                            return v(memo, r);
-                        }, {});
-                        return memo;
-                    }, {})
-                );
-            } catch (ex) {
-                return f(ex);
+    /**
+     * 保存配置
+     * @param items 枚举数组
+     * @param backupExpire 备份时长，该字段存在时启用备份
+     */
+    public async save(items: T[], backupExpire?: number) {
+        if (backupExpire) {
+            await this.m_Redis.set(
+                `Backup:Enum:${this.name}`,
+                JSON.stringify(items),
+                'EX',
+                backupExpire
+            );
+        }
+        const db = this.m_DbFactory.db<EnumModel>(
+            modelDbOption(EnumModel),
+            areaDbOption(this.areaNo),
+        );
+        const entries = await db.query().toArray({
+            where: {
+                id: this.name
             }
         });
-
-        const reduce = await this.m_Reduce;
-        return reduce[typer] as TReduce;
+        if (entries.length) {
+            entries[0].items = items;
+            await db.save(entries[0]);
+        } else {
+            await db.add({
+                id: this.name,
+                items: items,
+            });
+        }
     }
 }
