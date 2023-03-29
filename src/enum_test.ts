@@ -17,9 +17,9 @@ describe('src/enum.ts', () => {
             const mockRedis = new Mock<RedisBase>();
             const self = new Self(
                 name,
+                areaNo,
                 mockHandler.actual,
                 null,
-                areaNo,
                 mockDbFactory.actual,
                 mockRedis.actual
             );
@@ -71,9 +71,9 @@ describe('src/enum.ts', () => {
             const mockRedis = new Mock<RedisBase>();
             const self = new Self(
                 name,
+                areaNo,
                 mockHandler.actual,
                 null,
-                areaNo,
                 mockDbFactory.actual,
                 mockRedis.actual
             );

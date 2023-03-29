@@ -10,12 +10,13 @@ class EnumModel {
     id: string;
     items: EnumItem[];
 }
+
 export class Enum<T extends EnumItem> extends ReadonlyEnum<T> {
     public constructor(
-        public name: string,
-        protected loadHandler: LoadEnumHandlerBase,
-        protected reduceFunc: { [key: string]: (memo: any, item: T) => any; },
-        private areaNo: number,
+        name: string,
+        areaNo: number,
+        loadHandler: LoadEnumHandlerBase,
+        reduceFunc: { [key: string]: (memo: any, item: T) => any; },
         private m_DbFactory: DbFactoryBase,
         private m_Redis: RedisBase
     ) {
@@ -30,7 +31,7 @@ export class Enum<T extends EnumItem> extends ReadonlyEnum<T> {
     public async save(items: T[], backupExpire?: number) {
         if (backupExpire) {
             await this.m_Redis.set(
-                `Backup:Enum:${this.name}`,
+                `Enum:Backup:${this.name}`,
                 JSON.stringify(items),
                 'EX',
                 backupExpire

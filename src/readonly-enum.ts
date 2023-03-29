@@ -10,7 +10,7 @@ export class ReadonlyEnum<T extends EnumItem> {
         this.m_AllItem ??= new Promise<{ [no: number]: T; }>(async (s, f) => {
             try {
                 const opt: LoadEnumHandleOption = {
-                    areaNo: this.m_AreaNo,
+                    areaNo: this.areaNo,
                     enum: this,
                     res: {},
                 };
@@ -38,7 +38,7 @@ export class ReadonlyEnum<T extends EnumItem> {
 
     public constructor(
         public name: string,
-        private m_AreaNo: number,
+        protected areaNo: number,
         private m_LoadHandler: LoadEnumHandlerBase,
         private m_ReduceFunc: { [key: string]: (memo: any, item: T) => any; },
     ) { }
