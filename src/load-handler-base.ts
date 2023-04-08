@@ -1,4 +1,4 @@
-import { LoadEnumHandleOption } from './load-handle-option';
+import { LoadEnumHandlerContext } from './load-handler-context';
 
 export abstract class LoadEnumHandlerBase {
     protected next: LoadEnumHandlerBase;
@@ -8,5 +8,5 @@ export abstract class LoadEnumHandlerBase {
         return this.next;
     }
 
-    public abstract handle(opt: LoadEnumHandleOption): Promise<void>;
+    public abstract handle(ctx: LoadEnumHandlerContext): Promise<void>;
 }
