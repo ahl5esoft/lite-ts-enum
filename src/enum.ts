@@ -1,13 +1,14 @@
 import { EnumItem } from './enum-item';
+import { EnumItemData } from './enum-item-data';
 import { LoadEnumHandlerBase } from './load-handler-base';
 import { LoadEnumHandlerContext } from './load-handler-context';
 
-export class Enum<T extends EnumItem> {
+export class Enum<T extends EnumItemData> {
     private m_Reduce: Promise<{ [key: string]: any; }>;
 
-    private m_AllItem: Promise<{ [no: number]: T; }>;
+    private m_AllItem: Promise<{ [no: number]: EnumItem<T>; }>;
     public get allItem() {
-        this.m_AllItem ??= new Promise<{ [no: number]: T; }>(async (s, f) => {
+        this.m_AllItem ??= new Promise<{ [no: number]: EnumItem<T>; }>(async (s, f) => {
             try {
                 const ctx: LoadEnumHandlerContext = {
                     areaNo: this.m_AreaNo,
@@ -24,7 +25,7 @@ export class Enum<T extends EnumItem> {
     }
 
     public get items() {
-        return new Promise<T[]>(async (s, f) => {
+        return new Promise<EnumItem<T>[]>(async (s, f) => {
             try {
                 const allItem = await this.allItem;
                 s(
@@ -40,10 +41,10 @@ export class Enum<T extends EnumItem> {
         public name: string,
         private m_AreaNo: number,
         private m_LoadHandler: LoadEnumHandlerBase,
-        private m_ReduceFunc: { [key: string]: (memo: any, item: T) => any; },
+        private m_ReduceFunc: { [key: string]: (memo: any, item: EnumItem<T>) => any; },
     ) { }
 
-    public async get(predicate: (entry: T) => boolean) {
+    public async get(predicate: (entry: EnumItem<T>) => boolean) {
         const items = await this.items;
         return items.find(r => {
             return predicate(r);
