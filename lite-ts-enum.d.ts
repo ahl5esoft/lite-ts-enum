@@ -1,7 +1,10 @@
 declare class EnumItem {
+    private m_Name;
     value: number;
     key?: string;
     text?: string;
+    constructor(m_Name: string, entry: EnumItem);
+    getEncodingKey(attr: string): string;
 }
 declare class Enum<T extends EnumItem> {
     name: string;
@@ -50,50 +53,4 @@ declare class EnumFactory extends EnumFactoryBase {
         };
     });
     build<T extends EnumItem>(nameOrCtor: string | (new () => T), areaNo?: number): Enum<any>;
-}
-type Value = {
-    count: number;
-    valueType: number;
-} & Partial<{
-    targetNo: number;
-    targetType: number;
-    source: string;
-}>;
-type Reward = Value & {
-    weight?: number;
-};
-type ValueCondition = Value & {
-    op: string;
-};
-declare class ValueTypeData extends EnumItem {
-    autoRecovery: {
-        countdownOnValueType: number;
-        interval: number;
-        limitValueType: number;
-    };
-    isNegative: boolean;
-    isReplace: boolean;
-    parser?: {
-        exp: string;
-    };
-    range: {
-        max: number;
-        min: number;
-    };
-    reward: {
-        addition: {
-            childValueType: number;
-            mainValueType: number;
-        };
-        open: Reward[][];
-    };
-    sync: {
-        valueTypes: number[];
-    };
-    text: string;
-    time: {
-        valueType: number;
-        momentType: string;
-    };
-    value: number;
 }

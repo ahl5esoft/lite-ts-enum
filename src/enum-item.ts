@@ -1,12 +1,18 @@
-import { EnumItemData } from './enum-item-data';
+export class EnumItem {
+    public value: number;
 
-export class EnumItem<T extends EnumItemData> {
+    public key?: string;
+
+    public text?: string;
+
     public constructor(
-        public entry: T,
-        private m_Name: string
-    ) { }
+        private m_Name: string,
+        entry: EnumItem,
+    ) {
+        Object.assign(this, entry);
+    }
 
     public getEncodingKey(attr: string) {
-        return [this.m_Name, this.entry.value, attr].join('-');
+        return [this.m_Name, this.value, attr].join('-');
     }
 }
