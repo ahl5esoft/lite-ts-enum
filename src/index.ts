@@ -5,7 +5,6 @@ import { EnumFactoryBase } from './enum-factory-base';
 import { EnumItem } from './enum-item';
 import { LoadEnumHandlerBase } from './load-handler-base';
 import { LoadEnumHandlerContext } from './load-handler-context';
-import { Reward, ValueTypeData, Value, ValueCondition } from './value-type-data';
 
 export {
     DelegateLoadEnumHandler,
@@ -14,11 +13,7 @@ export {
     EnumFactoryBase,
     EnumItem,
     LoadEnumHandlerBase,
-    LoadEnumHandlerContext,
-    Reward,
-    Value,
-    ValueCondition,
-    ValueTypeData,
+    LoadEnumHandlerContext
 };
 globalThis['lite-ts-enum'] = {
     DelegateLoadEnumHandler,
@@ -27,5 +22,4 @@ globalThis['lite-ts-enum'] = {
     EnumFactoryBase,
     EnumItem,
     LoadEnumHandlerBase,
-    ValueTypeData,
 };
