@@ -12,7 +12,8 @@ export class EnumItem {
     }
 
     public static create(name: string, entry: EnumItem) {
-        const item = Object.assign(new EnumItem(), entry);
+        const item = new EnumItem();
+        Object.assign(item, entry);
         item.m_Name = name;
         return item;
     }
