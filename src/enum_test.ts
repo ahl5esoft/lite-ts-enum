@@ -8,23 +8,23 @@ describe('src/enum.ts', () => {
     describe('.allItem', () => {
         it('ok', async () => {
             const mockHandler = new Mock<LoadEnumHandlerBase>();
-            const self = new Self('tt', 0, mockHandler.actual, null);
+            const self = new Self('tt', 'tt', 0, mockHandler.actual, null);
 
             mockHandler.expected.handle({
+                app: 'tt',
                 areaNo: 0,
                 enum: self,
                 res: {}
             });
 
             const res = await self.allItem;
-            await self.allItem;
             deepStrictEqual(res, {});
         });
     });
 
     describe('.items', () => {
         it('ok', async () => {
-            const self = new Self('tt', 0, null, null);
+            const self = new Self('tt', 'tt', 0, null, null);
 
             Reflect.set(self, 'm_AllItem', {
                 a: 'aa',
@@ -38,7 +38,7 @@ describe('src/enum.ts', () => {
 
     describe('.get(predicate: (entry: T) => boolean)', () => {
         it('ok', async () => {
-            const self = new Self('tt', 0, null, null);
+            const self = new Self('tt', 'tt', 0, null, null);
 
             Reflect.set(self, 'm_AllItem', {
                 a: {
@@ -58,7 +58,7 @@ describe('src/enum.ts', () => {
 
     describe('.getReduce<TReduce>(typer: string)', () => {
         it('ok', async () => {
-            const self = new Self('tt', 0, null, null);
+            const self = new Self('tt', 'tt', 0, null, null);
 
             Reflect.set(self, 'm_Reduce', {
                 a: {
