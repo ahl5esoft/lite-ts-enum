@@ -10,6 +10,7 @@ export class Enum<T extends EnumItem> {
         this.m_AllItem ??= new Promise<{ [no: number]: T; }>(async (s, f) => {
             try {
                 const ctx: LoadEnumHandlerContext = {
+                    app: this.m_App,
                     areaNo: this.m_AreaNo,
                     enum: this,
                     res: {},
@@ -38,6 +39,7 @@ export class Enum<T extends EnumItem> {
 
     public constructor(
         public name: string,
+        private m_App: string,
         private m_AreaNo: number,
         private m_LoadHandler: LoadEnumHandlerBase,
         private m_ReduceFunc: { [key: string]: (memo: any, item: T) => any; },

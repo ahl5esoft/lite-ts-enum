@@ -1,4 +1,5 @@
 import { Enum } from './enum';
+import { EnumBuildOption } from './enum-build-option';
 import { EnumFactoryBase } from './enum-factory-base';
 import { EnumItem } from './enum-item';
 import { LoadEnumHandlerBase } from './load-handler-base';
@@ -15,11 +16,12 @@ export class EnumFactory extends EnumFactoryBase {
         super();
     }
 
-    public build<T extends EnumItem>(nameOrCtor: string | (new () => T), areaNo = 0) {
-        const enumName = typeof nameOrCtor == 'string' ? nameOrCtor : nameOrCtor.name;
+    public build<T extends EnumItem>(opt: EnumBuildOption<T>) {
+        const enumName = typeof opt.nameOrCtor == 'string' ? opt.nameOrCtor : opt.nameOrCtor.name;
         return new Enum(
             enumName,
-            areaNo,
+            opt.app,
+            opt.areaNo,
             this.m_LoadHandler,
             this.m_ReduceFunc[enumName] ?? {},
         );
