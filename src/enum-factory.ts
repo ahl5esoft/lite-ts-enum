@@ -1,4 +1,4 @@
-import {ioc} from "lite-ts-ioc"
+import {ioc} from 'lite-ts-ioc';
 
 import { Enum } from './enum';
 import { EnumBuildOption } from './enum-build-option';
@@ -18,7 +18,7 @@ export class EnumFactory extends EnumFactoryBase {
     }
 
     public build<T extends EnumItem>(opt: EnumBuildOption<T>) {
-        const enumName = ioc.getKey(opt.nameOrCtor)
+        const enumName = ioc.getKey(opt.name ?? opt.ctor);
         return new Enum(
             enumName,
             opt.app,
