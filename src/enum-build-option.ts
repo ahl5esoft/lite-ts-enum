@@ -1,5 +1,6 @@
-export type EnumBuildOption<T> = { 
-  nameOrCtor: string | (new () => T),
-  app?: string, 
-  areaNo?: number 
-}
+export type EnumBuildOption<T> = Partial<{ 
+  app: string, 
+  areaNo: number ,
+  ctor: (new () => T),
+  nameOrCtor: string 
+}>
