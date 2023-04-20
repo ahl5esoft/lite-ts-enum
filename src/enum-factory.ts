@@ -1,9 +1,10 @@
+import {ioc} from "lite-ts-ioc"
+
 import { Enum } from './enum';
 import { EnumBuildOption } from './enum-build-option';
 import { EnumFactoryBase } from './enum-factory-base';
 import { EnumItem } from './enum-item';
 import { LoadEnumHandlerBase } from './load-handler-base';
-
 export class EnumFactory extends EnumFactoryBase {
     public constructor(
         private m_LoadHandler: LoadEnumHandlerBase,
@@ -17,7 +18,7 @@ export class EnumFactory extends EnumFactoryBase {
     }
 
     public build<T extends EnumItem>(opt: EnumBuildOption<T>) {
-        const enumName = typeof opt.nameOrCtor == 'string' ? opt.nameOrCtor : opt.nameOrCtor.name;
+        const enumName = ioc.getKey(opt.nameOrCtor)
         return new Enum(
             enumName,
             opt.app,
