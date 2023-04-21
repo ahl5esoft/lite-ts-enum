@@ -1,13 +1,14 @@
-import {ioc} from 'lite-ts-ioc';
+import { ioc } from 'lite-ts-ioc';
 
 import { Enum } from './enum';
 import { EnumBuildOption } from './enum-build-option';
 import { EnumFactoryBase } from './enum-factory-base';
 import { EnumItem } from './enum-item';
-import { LoadEnumHandlerBase } from './load-handler-base';
+import { EnumLoadHandlerBase } from './load-handler-base';
+
 export class EnumFactory extends EnumFactoryBase {
     public constructor(
-        private m_LoadHandler: LoadEnumHandlerBase,
+        private m_LoadHandler: EnumLoadHandlerBase,
         private m_ReduceFunc: {
             [enumName: string]: {
                 [key: string]: (memo: any, item: any) => any;

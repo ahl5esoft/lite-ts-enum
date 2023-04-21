@@ -2,12 +2,12 @@ import { deepStrictEqual } from 'assert';
 import { Mock } from 'lite-ts-mock';
 
 import { Enum as Self } from './enum';
-import { LoadEnumHandlerBase } from './load-handler-base';
+import { EnumLoadHandlerBase } from './load-handler-base';
 
 describe('src/enum.ts', () => {
     describe('.allItem', () => {
         it('ok', async () => {
-            const mockHandler = new Mock<LoadEnumHandlerBase>();
+            const mockHandler = new Mock<EnumLoadHandlerBase>();
             const self = new Self('tt', 'tt', 0, mockHandler.actual, null);
 
             mockHandler.expected.handle({

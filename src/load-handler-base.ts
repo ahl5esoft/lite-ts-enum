@@ -1,12 +1,12 @@
-import { LoadEnumHandlerContext } from './load-handler-context';
+import { EnumLoadHandlerContext } from './load-handler-context';
 
-export abstract class LoadEnumHandlerBase {
-    protected next: LoadEnumHandlerBase;
+export abstract class EnumLoadHandlerBase {
+    protected next: EnumLoadHandlerBase;
 
-    public setNext(v: LoadEnumHandlerBase) {
+    public setNext(v: EnumLoadHandlerBase) {
         this.next = v;
         return this.next;
     }
 
-    public abstract handle(ctx: LoadEnumHandlerContext): Promise<void>;
+    public abstract handle(ctx: EnumLoadHandlerContext): Promise<void>;
 }

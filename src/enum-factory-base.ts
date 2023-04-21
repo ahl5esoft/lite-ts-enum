@@ -1,6 +1,7 @@
 import { Enum } from './enum';
 import { EnumBuildOption } from './enum-build-option';
 import { EnumItem } from './enum-item';
+
 export abstract class EnumFactoryBase {
     public static ctor = 'EnumFactoryBase';
 

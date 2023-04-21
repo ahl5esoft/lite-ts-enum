@@ -1,6 +1,6 @@
 import { EnumItem } from './enum-item';
-import { LoadEnumHandlerBase } from './load-handler-base';
-import { LoadEnumHandlerContext } from './load-handler-context';
+import { EnumLoadHandlerBase } from './load-handler-base';
+import { EnumLoadHandlerContext } from './load-handler-context';
 
 export class Enum<T extends EnumItem> {
     private m_Reduce: Promise<{ [key: string]: any; }>;
@@ -9,7 +9,7 @@ export class Enum<T extends EnumItem> {
     public get allItem() {
         this.m_AllItem ??= new Promise<{ [no: number]: T; }>(async (s, f) => {
             try {
-                const ctx: LoadEnumHandlerContext = {
+                const ctx: EnumLoadHandlerContext = {
                     app: this.m_App,
                     areaNo: this.m_AreaNo,
                     enum: this,
@@ -41,7 +41,7 @@ export class Enum<T extends EnumItem> {
         public name: string,
         private m_App: string,
         private m_AreaNo: number,
-        private m_LoadHandler: LoadEnumHandlerBase,
+        private m_LoadHandler: EnumLoadHandlerBase,
         private m_ReduceFunc: { [key: string]: (memo: any, item: T) => any; },
     ) { }
 
