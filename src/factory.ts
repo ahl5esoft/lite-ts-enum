@@ -1,9 +1,9 @@
 import { ioc } from 'lite-ts-ioc';
 
 import { Enum } from './enum';
-import { EnumBuildOption } from './enum-build-option';
-import { EnumFactoryBase } from './enum-factory-base';
-import { EnumItem } from './enum-item';
+import { EnumBuildOption } from './build-option';
+import { EnumFactoryBase } from './factory-base';
+import { EnumItem } from './item';
 import { EnumLoadHandlerBase } from './load-handler-base';
 
 export class EnumFactory extends EnumFactoryBase {
