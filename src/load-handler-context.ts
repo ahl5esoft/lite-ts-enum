@@ -1,8 +1,8 @@
 import { Enum } from './enum';
 
-export type EnumLoadHandlerContext = Partial<{
+export type EnumLoadHandlerContext = {
     app: string;
     areaNo: number;
     enum: Enum<any>;
-    res: { [no: number]: any; };
-}>;
+    res?: { [no: number]: any; };
+};

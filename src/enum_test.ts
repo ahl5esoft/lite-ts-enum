@@ -14,7 +14,6 @@ describe('src/enum.ts', () => {
                 app: 'tt',
                 areaNo: 0,
                 enum: self,
-                res: {}
             });
 
             const res = await self.allItem;

@@ -1,4 +1,4 @@
-import { EnumItem } from './item';
+import { EnumItem } from './i-item';
 import { EnumLoadHandlerBase } from './load-handler-base';
 import { EnumLoadHandlerContext } from './load-handler-context';
 
@@ -13,9 +13,9 @@ export class Enum<T extends EnumItem> {
                     app: this.m_App,
                     areaNo: this.m_AreaNo,
                     enum: this,
-                    res: {},
                 };
                 await this.m_LoadHandler.handle(ctx);
+                ctx.res ??= {};
                 s(ctx.res);
             } catch (ex) {
                 f(ex);
