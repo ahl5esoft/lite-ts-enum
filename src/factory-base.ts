@@ -1,15 +1,15 @@
 import { ioc } from 'lite-ts-ioc';
 
 import { Enum } from './enum';
-import { EnumItem } from './i-item';
+import { EnumItem } from './item';
 import { EnumLoadHandlerBase } from './load-handler-base';
 
-export type EnumBuildOption<T> = Partial<{ 
-    app: string;
+export type EnumBuildOption<T> = {
     areaNo: number;
-    ctor: new () => T;
-    name: string;
-  }>;
+    app: string;
+    name?: string;
+    ctor?: new () => T;
+};
 
 export abstract class EnumFactoryBase {
     public static ctor = 'EnumFactoryBase';

@@ -1,4 +1,4 @@
-import { EnumItem } from './i-item';
+import { EnumItem } from './item';
 import { EnumLoadHandlerBase } from './load-handler-base';
 import { EnumLoadHandlerContext } from './load-handler-context';
 
